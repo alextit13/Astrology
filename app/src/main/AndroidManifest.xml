@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SelectLenguage"></activity>
+        <activity android:name=".SelectLenguage" />
+        <activity android:name=".AddInformation"></activity>
     </application>
 
 </manifest>
