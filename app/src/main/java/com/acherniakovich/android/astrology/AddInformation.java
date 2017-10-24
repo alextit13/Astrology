@@ -1,7 +1,9 @@
 package com.acherniakovich.android.astrology;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,10 +17,14 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -41,6 +47,9 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
     private int _birthYear;
 
     private String [] countries;
+    private Integer [] diffTimeArr;
+    private SharedPreferences sPref;
+    final String SAVED_TEXT = "saved_text";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -294,7 +303,12 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
         ArrayAdapter <String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,countries);
         listViewCountry.setAdapter(adapter);
 
-        if (!readFromFile(this).equals("")){
+        diffTimeArr = new Integer[]{-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0, 1,2,3,4,5,6,7,8,9,10,11,12};
+        ArrayAdapter <Integer> arrayAdapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_list_item_1,diffTimeArr);
+        diffTime.setAdapter(arrayAdapter);
+
+        String check = loadText();
+        if (!check.equals("")){
 
         }
     }
@@ -338,58 +352,67 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
             }
             People people = new People(name.getText().toString(),button_year.getText().toString(),listViewCountry.getSelectedItem().toString()
                     ,city.getText().toString(),diffTime.getSelectedItem().toString(),sexText);
-            createText(people);
+            witeObjectToFile(this,people,SAVED_TEXT);
+            readObjectFromFile(this,SAVED_TEXT);
+            saveText();
 
         }else{
             Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void createText(People people) {
+    public void witeObjectToFile(Context context, People people, String filename) {
+
+        ObjectOutputStream objectOut = null;
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(AddInformation.this.openFileOutput("people.txt", Context.MODE_APPEND));
-            outputStreamWriter.write(people.getName());
-            outputStreamWriter.write(people.getDateOfBirdth());
-            outputStreamWriter.write(people.getCountry());
-            outputStreamWriter.write(people.getCity());
-            outputStreamWriter.write(people.getDifferentTime());
-            outputStreamWriter.write(people.getSex());
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.d(MainActivity.LOG_TAG, "File write failed: " + e.toString());
+
+            FileOutputStream fileOut = context.openFileOutput(filename, Activity.MODE_PRIVATE);
+            objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(people);
+            fileOut.getFD().sync();
+            Toast.makeText(this, "Сохранено", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (objectOut != null) {
+                try {
+                    objectOut.close();
+                } catch (IOException e) {
+                    // do nowt
+                }
+            }
         }
     }
 
-    private String readFromFile(Context context) {
+    public static People readObjectFromFile(Context context, String filename) {
 
-        String ret = "";
-
+        ObjectInputStream objectIn = null;
+        People people = null;
         try {
-            InputStream inputStream = context.openFileInput("people.txt");
 
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
+            FileInputStream fileIn = context.getApplicationContext().openFileInput(filename);
+            objectIn = new ObjectInputStream(fileIn);
+            people = (People) objectIn.readObject();
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
+            Log.d(MainActivity.LOG_TAG,people.getName());
+
+        } catch (FileNotFoundException e) {
+            // Do nothing
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (objectIn != null) {
+                try {
+                    objectIn.close();
+                } catch (IOException e) {
+                    // do nowt
                 }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
-                Log.d(MainActivity.LOG_TAG, "ret: " + ret);
             }
         }
-        catch (FileNotFoundException e) {
-            Log.d(MainActivity.LOG_TAG, "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.d(MainActivity.LOG_TAG, "Can not read file: " + e.toString());
-        }
 
-        return ret;
+        return people;
     }
 
     @Override
@@ -403,5 +426,20 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
         button_year.animate()
                 .rotationXBy(360)
                 .start();
+    }
+
+    void saveText() {
+        sPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString(SAVED_TEXT, "Have saved data");
+        ed.commit();
+        //Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
+    }
+
+    String loadText() {
+        sPref = getPreferences(MODE_PRIVATE);
+        String savedText = sPref.getString(SAVED_TEXT, "");
+        //Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
+        return savedText;
     }
 }
