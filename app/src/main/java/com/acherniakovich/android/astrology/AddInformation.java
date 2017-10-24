@@ -1,16 +1,25 @@
 package com.acherniakovich.android.astrology;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ListView;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -18,10 +27,11 @@ import java.util.TimeZone;
 public class AddInformation extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     private Button button_year;
-    private Button city;
-    private Button diffTime;
+    private EditText city;
+    private EditText name;
+    private Spinner diffTime;
     private Switch sex;
-    private Spinner listViewCity;
+    private Spinner listViewCountry;
 
     private Button save;
     private Button cancel;
@@ -42,12 +52,13 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
 
     private void init() {
         button_year = (Button)findViewById(R.id.year);
-        city = (Button) findViewById(R.id.city);
-        diffTime = (Button) findViewById(R.id.diffTime);
+        name = (EditText)findViewById(R.id.name);
+        city = (EditText) findViewById(R.id.city);
+        diffTime = (Spinner) findViewById(R.id.diffTime);
         sex = (Switch)findViewById(R.id.sex);
         save = (Button) findViewById(R.id.save);
         cancel = (Button) findViewById(R.id.close);
-        listViewCity = (Spinner) findViewById(R.id.listViewCity);
+        listViewCountry = (Spinner) findViewById(R.id.listViewCountry);
 
         countries = new String [] {"	Азербайджан 	"	,
                 "	Армения 	"	,
@@ -281,7 +292,11 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
                 "	Эквадор	"};
         Arrays.sort(countries);
         ArrayAdapter <String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,countries);
-        listViewCity.setAdapter(adapter);
+        listViewCountry.setAdapter(adapter);
+
+        if (!readFromFile(this).equals("")){
+
+        }
     }
 
     public void onClick(View view) {
@@ -303,11 +318,78 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
                 break;
             case R.id.save:
                 //year
+                saveData();
                 break;
             case R.id.close:
                 //year
                 break;
         }
+    }
+
+    private void saveData() {
+        if (!name.getText().toString().equals("")&!button_year.getText().toString().equals("Год рождения")
+                &!listViewCountry.getSelectedItem().equals(null)&!city.getText().toString().equals("")
+                &!diffTime.getSelectedItem().equals("")){
+            String sexText = "";
+            if (!sex.isChecked()){
+                sexText = "Мужчина";
+            }else{
+                sexText = "Женщина";
+            }
+            People people = new People(name.getText().toString(),button_year.getText().toString(),listViewCountry.getSelectedItem().toString()
+                    ,city.getText().toString(),diffTime.getSelectedItem().toString(),sexText);
+            createText(people);
+
+        }else{
+            Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void createText(People people) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(AddInformation.this.openFileOutput("people.txt", Context.MODE_APPEND));
+            outputStreamWriter.write(people.getName());
+            outputStreamWriter.write(people.getDateOfBirdth());
+            outputStreamWriter.write(people.getCountry());
+            outputStreamWriter.write(people.getCity());
+            outputStreamWriter.write(people.getDifferentTime());
+            outputStreamWriter.write(people.getSex());
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.d(MainActivity.LOG_TAG, "File write failed: " + e.toString());
+        }
+    }
+
+    private String readFromFile(Context context) {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("people.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+                Log.d(MainActivity.LOG_TAG, "ret: " + ret);
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.d(MainActivity.LOG_TAG, "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.d(MainActivity.LOG_TAG, "Can not read file: " + e.toString());
+        }
+
+        return ret;
     }
 
     @Override
