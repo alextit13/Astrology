@@ -365,7 +365,6 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
 
         ObjectOutputStream objectOut = null;
         try {
-
             FileOutputStream fileOut = context.openFileOutput(filename, Activity.MODE_PRIVATE);
             objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(people);

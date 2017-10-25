@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.acherniakovich.android.astrology">
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/iconapp"
@@ -20,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SelectLenguage" />
-        <activity android:name=".AddInformation"></activity>
-    </application>
+        <activity android:name=".AddInformation">
 
+        </activity>
+    </application>
 </manifest>
