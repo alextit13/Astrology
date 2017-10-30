@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SelectLenguage" />
-        <activity android:name=".AddInformation">
+        <activity android:name=".AddInformation"
+            android:parentActivityName=".MainActivity">
 
         </activity>
     </application>

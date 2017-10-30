@@ -49,7 +49,7 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
     private String [] countries;
     private Integer [] diffTimeArr;
     private SharedPreferences sPref;
-    final String SAVED_TEXT = "saved_text";
+    public static final String SAVED_TEXT = "saved_text.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,6 +336,7 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
                 break;
             case R.id.close:
                 //year
+                finish();
                 break;
         }
     }
@@ -355,7 +356,7 @@ public class AddInformation extends AppCompatActivity implements DatePickerDialo
             witeObjectToFile(this,people,SAVED_TEXT);
             readObjectFromFile(this,SAVED_TEXT);
             saveText();
-
+            finish();
         }else{
             Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
         }

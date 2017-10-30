@@ -4,5 +4,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="swich">Off</string>
+
     <string name="action_settings">Settings</string>
+    <string name="item_one">Предсказательный гороскоп</string>
+    <string name="item_two">Расчет совместимости</string>
+    <string name="item_three">Расчет периодов</string>
 </resources>

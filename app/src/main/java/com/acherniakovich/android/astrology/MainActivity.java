@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,12 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity
@@ -27,15 +31,22 @@ public class MainActivity extends AppCompatActivity
 
     public static final String LOG_TAG = "MyLogs";
     private String resultFromSelectLenguage;
+    private String swich;
+    private ViewPager viewPager;
+    private CustomSwipeAdapter customSwipeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //writeToFile("first",this);
 
-        String swich = readFromFile(this);
+        viewPager = (ViewPager)findViewById(R.id.view_pager);
+        customSwipeAdapter = new CustomSwipeAdapter(this);
+        viewPager.setAdapter(customSwipeAdapter);
+
+        swich = readFromFile(this);
         Log.d(MainActivity.LOG_TAG,swich);
+
         if (swich.equals("first")){
             Intent intent = new Intent(MainActivity.this,SelectLenguage.class);
             startActivityForResult(intent,1);
@@ -175,11 +186,47 @@ public class MainActivity extends AppCompatActivity
             }
         }
         catch (FileNotFoundException e) {
-            Log.d(LOG_TAG, "File not found: " + e.toString());
+            //Log.d(LOG_TAG, "File not found: " + e.toString());
+            writeToFile("first",this);
+            swich = readFromFile(this);
+
+
         } catch (IOException e) {
             Log.d(LOG_TAG, "Can not read file: " + e.toString());
         }
 
         return ret;
+    }
+
+    public People readObjectFromFile(Context context, String filename) {
+
+        ObjectInputStream objectIn = null;
+        People people = null;
+        try {
+
+            FileInputStream fileIn = context.getApplicationContext().openFileInput(filename);
+            objectIn = new ObjectInputStream(fileIn);
+            people = (People) objectIn.readObject();
+
+            Log.d(MainActivity.LOG_TAG,people.getName());
+
+
+        } catch (FileNotFoundException e) {
+            // Do nothing
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (objectIn != null) {
+                try {
+                    objectIn.close();
+                } catch (IOException e) {
+                    // do nowt
+                }
+            }
+        }
+
+        return people;
     }
 }
