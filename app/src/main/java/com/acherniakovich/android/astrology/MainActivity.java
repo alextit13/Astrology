@@ -15,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
@@ -34,15 +36,69 @@ public class MainActivity extends AppCompatActivity
     private String swich;
     private ViewPager viewPager;
     private CustomSwipeAdapter customSwipeAdapter;
+    private ImageView back;
+    private ImageView next;
+    private FrameLayout frame_layout_container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        frame_layout_container = (FrameLayout)findViewById(R.id.frame_layout_container);
+
+        back = (ImageView)findViewById(R.id.back);
+        next = (ImageView)findViewById(R.id.next);
+
         viewPager = (ViewPager)findViewById(R.id.view_pager);
         customSwipeAdapter = new CustomSwipeAdapter(this);
         viewPager.setAdapter(customSwipeAdapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
+                Log.d(LOG_TAG,"onPageScrolled"+positionOffsetPixels);
+
+                if (positionOffsetPixels!=0) frame_layout_container.getBackground().setBounds(positionOffsetPixels/10,0,0,getResources().getDisplayMetrics().heightPixels);
+
+                View v = viewPager.getChildAt(position);
+                v.setOnClickListener(null);
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //тут обрабатываем нажатия на кнопки
+                        if (position==0){
+
+                        }else if (position==1){
+
+                        }else if (position==2){
+
+                        }
+                    }
+                });
+                if (position==0){
+                    back.setVisibility(View.INVISIBLE);
+                    next.setVisibility(View.VISIBLE);
+                }else if (position==1){
+                    back.setVisibility(View.VISIBLE);
+                    next.setVisibility(View.VISIBLE);
+                }else if (position==2){
+                    back.setVisibility(View.VISIBLE);
+                    next.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageSelected(final int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.d(LOG_TAG,"onPageScrollStateChanged" + state);
+
+            }
+        });
 
         swich = readFromFile(this);
         Log.d(MainActivity.LOG_TAG,swich);
@@ -196,37 +252,5 @@ public class MainActivity extends AppCompatActivity
         }
 
         return ret;
-    }
-
-    public People readObjectFromFile(Context context, String filename) {
-
-        ObjectInputStream objectIn = null;
-        People people = null;
-        try {
-
-            FileInputStream fileIn = context.getApplicationContext().openFileInput(filename);
-            objectIn = new ObjectInputStream(fileIn);
-            people = (People) objectIn.readObject();
-
-            Log.d(MainActivity.LOG_TAG,people.getName());
-
-
-        } catch (FileNotFoundException e) {
-            // Do nothing
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if (objectIn != null) {
-                try {
-                    objectIn.close();
-                } catch (IOException e) {
-                    // do nowt
-                }
-            }
-        }
-
-        return people;
     }
 }
