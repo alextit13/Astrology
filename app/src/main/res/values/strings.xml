@@ -10,4 +10,9 @@
     <string name="item_one">Предсказательный гороскоп</string>
     <string name="item_two">Расчет совместимости</string>
     <string name="item_three">Расчет периодов</string>
+
+    <string name="text_tab1">Это первая вкладка</string>
+    <string name="text_tab2">Это вторая вкладка</string>
+    <string name="text_tab_header">Свой заголовок</string>
+    <string name="text_tab3">Это третья вкладка</string>
 </resources>

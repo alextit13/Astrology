@@ -2,10 +2,13 @@ package com.acherniakovich.android.astrology;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +22,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.q42.android.scrollingimageview.ScrollingImageView;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,11 +45,14 @@ public class MainActivity extends AppCompatActivity
     private ImageView back;
     private ImageView next;
     private FrameLayout frame_layout_container;
+    private ScrollingImageView scrollingBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        scrollingBackground = (ScrollingImageView)findViewById(R.id.scrolling_background);
 
         frame_layout_container = (FrameLayout)findViewById(R.id.frame_layout_container);
 
@@ -57,25 +66,6 @@ public class MainActivity extends AppCompatActivity
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
-                Log.d(LOG_TAG,"onPageScrolled"+positionOffsetPixels);
-
-                if (positionOffsetPixels!=0) frame_layout_container.getBackground().setBounds(positionOffsetPixels/10,0,0,getResources().getDisplayMetrics().heightPixels);
-
-                View v = viewPager.getChildAt(position);
-                v.setOnClickListener(null);
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //тут обрабатываем нажатия на кнопки
-                        if (position==0){
-
-                        }else if (position==1){
-
-                        }else if (position==2){
-
-                        }
-                    }
-                });
                 if (position==0){
                     back.setVisibility(View.INVISIBLE);
                     next.setVisibility(View.VISIBLE);
@@ -89,19 +79,18 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onPageSelected(final int position) {
+            public void onPageSelected(int position) {
 
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.d(LOG_TAG,"onPageScrollStateChanged" + state);
 
             }
         });
 
         swich = readFromFile(this);
-        Log.d(MainActivity.LOG_TAG,swich);
+        //Log.d(MainActivity.LOG_TAG,swich);
 
         if (swich.equals("first")){
             Intent intent = new Intent(MainActivity.this,SelectLenguage.class);
@@ -252,5 +241,17 @@ public class MainActivity extends AppCompatActivity
         }
 
         return ret;
+    }
+
+    public void onClick(View view) {
+        TextView t = (TextView)view.findViewById(R.id.image_count);
+        if (t.getText().toString().equals("Прогноз")){
+            Intent intent = new Intent(MainActivity.this,Prognoz.class);
+            startActivity(intent);
+        }else if (t.getText().toString().equals("Совместимость")){
+
+        }else if (t.getText().toString().equals("Периоды")){
+
+        }
     }
 }
