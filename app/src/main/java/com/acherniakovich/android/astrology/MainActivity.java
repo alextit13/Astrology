@@ -249,7 +249,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this,Prognoz.class);
             startActivity(intent);
         }else if (t.getText().toString().equals("Совместимость")){
-
+            Intent intent = new Intent(MainActivity.this,Sovmestimost.class);
+            startActivity(intent);
         }else if (t.getText().toString().equals("Периоды")){
 
         }

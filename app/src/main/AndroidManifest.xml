@@ -22,8 +22,11 @@
         <activity android:name=".SelectLenguage" />
         <activity
             android:name=".AddInformation"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".Prognoz"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".Prognoz" />
+        <activity android:name=".Sovmestimost" />
+        <activity android:name=".SovmResult" />
+        <activity android:name=".Periodi"></activity>
     </application>
 
 </manifest>

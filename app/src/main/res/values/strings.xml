@@ -15,4 +15,15 @@
     <string name="text_tab2">Это вторая вкладка</string>
     <string name="text_tab_header">Свой заголовок</string>
     <string name="text_tab3">Это третья вкладка</string>
+    <string name="text_day_prognoz">День прогноза</string>
+    <string name="text_year_prognoz">Год прогноза</string>
+    <string name="text_city_prognoz">Город встречи</string>
+    <string name="sovm_main_text">Введите данные партнера</string>
+    <string name="sovm_year">Выберите год встречи</string>
+    <string name="sovm_month">Выберите месяц знакомства</string>
+    <string name="sovm_day">Выберите день знакомства</string>
+    <string name="rasschitat">Рассчитать</string>
+    <string name="result">Результат</string>
+    <string name="plus">Позитивные взаимодействия</string>
+    <string name="minus">Проблемные взаимодействия</string>
 </resources>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background_main"
+    tools:context="com.acherniakovich.android.astrology.Sovmestimost">
+    <TextView
+        android:gravity="center"
+        android:layout_margin="20sp"
+        android:textSize="30sp"
+        android:textColor="#fff"
+        android:text="@string/sovm_main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_margin="10sp"
+            android:background="@drawable/my_button_bg"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_margin="5sp"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:text="@string/sovm_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:layout_margin="5sp"
+                android:gravity="center"
+                android:id="@+id/sp_sov_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </Spinner>
+            <TextView
+                android:layout_margin="5sp"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:text="@string/sovm_month"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:layout_margin="5sp"
+                android:gravity="center"
+                android:id="@+id/sp_sov_mounth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </Spinner>
+            <TextView
+                android:layout_margin="5sp"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:text="@string/sovm_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:layout_margin="5sp"
+                android:gravity="center"
+                android:id="@+id/sp_sov_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </Spinner>
+            <Button
+                android:text="@string/rasschitat"
+                android:background="@drawable/my_button_bg"
+                android:layout_margin="10sp"
+                android:id="@+id/button_1"
+                android:onClick="onClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

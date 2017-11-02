@@ -22,18 +22,126 @@
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
+                <LinearLayout
+                    android:orientation="vertical"
                     android:id="@+id/tvTab1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_tab1">
-                </TextView>
-                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/text_tab1"
+                    android:layout_gravity="center">
+                    <LinearLayout
+                        android:layout_margin="20sp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textColor="#fff"
+                            android:layout_weight="1"
+                            android:text="@string/text_day_prognoz"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <EditText
+                            android:layout_weight="1"
+                            android:id="@+id/et_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_margin="20sp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textColor="#fff"
+                            android:layout_weight="1"
+                            android:text="@string/text_year_prognoz"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <Spinner
+                            android:id="@+id/sp_1"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </Spinner>
+                    </LinearLayout>
+                    <Button
+                        android:background="@drawable/my_button_bg"
+                        android:layout_marginStart="20sp"
+                        android:layout_marginEnd="20sp"
+                        android:layout_gravity="center"
+                        android:text="Рассчитать"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout> // прогноз на день
+                <LinearLayout
+                    android:orientation="vertical"
                     android:id="@+id/tvTab2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_tab2">
-                </TextView>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/text_tab1"
+                    android:layout_gravity="center">
+                    <LinearLayout
+                        android:layout_margin="20sp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textColor="#fff"
+                            android:layout_weight="1"
+                            android:text="@string/text_day_prognoz"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <EditText
+                            android:layout_weight="1"
+                            android:id="@+id/et_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_margin="20sp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textColor="#fff"
+                            android:layout_weight="1"
+                            android:text="@string/text_year_prognoz"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <Spinner
+                            android:id="@+id/sp_2"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </Spinner>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_margin="20sp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textColor="#fff"
+                            android:layout_weight="1"
+                            android:text="@string/text_city_prognoz"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <EditText
+                            android:id="@+id/et_city"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </EditText>
+                    </LinearLayout>
+                    <Button
+                        android:background="@drawable/my_button_bg"
+                        android:layout_marginStart="20sp"
+                        android:layout_marginEnd="20sp"
+                        android:layout_gravity="center"
+                        android:text="Рассчитать"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout> //прогноз на год
             </FrameLayout>
         </LinearLayout>
     </TabHost>
