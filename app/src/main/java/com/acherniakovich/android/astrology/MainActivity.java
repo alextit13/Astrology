@@ -2,6 +2,7 @@ package com.acherniakovich.android.astrology;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -33,13 +34,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String LOG_TAG = "MyLogs";
     private String resultFromSelectLenguage;
-    private String swich;
     private ViewPager viewPager;
     private CustomSwipeAdapter customSwipeAdapter;
     private ImageView back;
@@ -51,6 +52,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Boolean isFirstRun = getSharedPreferences("PREFERENCE",MODE_PRIVATE).getBoolean("isfirstrun",true);
+        if (isFirstRun){
+            Toast.makeText(this, "FirstRun", Toast.LENGTH_SHORT).show();
+            getSharedPreferences("PREFERENCE",MODE_PRIVATE).edit().putBoolean("isfirstrun",false).commit();
+            Intent intent = new Intent(MainActivity.this,SelectLenguage.class);
+            startActivityForResult(intent,0);
+        }
 
         scrollingBackground = (ScrollingImageView)findViewById(R.id.scrolling_background);
 
@@ -88,15 +97,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-        swich = readFromFile(this);
-        //Log.d(MainActivity.LOG_TAG,swich);
-
-        if (swich.equals("first")){
-            Intent intent = new Intent(MainActivity.this,SelectLenguage.class);
-            startActivityForResult(intent,1);
-        }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -127,14 +127,15 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        writeToFile("second",this);
         if (data==null){
             return;
         }
         resultFromSelectLenguage = data.getStringExtra("lenguage");
+        Log.d(LOG_TAG,resultFromSelectLenguage);
 
         if (resultFromSelectLenguage.equals("russian")){
             //all texts on russian
+
         }else if (resultFromSelectLenguage.equals("english")){
             //all texts on english
         }
@@ -198,51 +199,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void writeToFile(String data,Context context) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.d(LOG_TAG, "File write failed: " + e.toString());
-        }
-    }
-
-    private String readFromFile(Context context) {
-
-        String ret = "";
-
-        try {
-            InputStream inputStream = context.openFileInput("config.txt");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
-            }
-        }
-        catch (FileNotFoundException e) {
-            //Log.d(LOG_TAG, "File not found: " + e.toString());
-            writeToFile("first",this);
-            swich = readFromFile(this);
-
-
-        } catch (IOException e) {
-            Log.d(LOG_TAG, "Can not read file: " + e.toString());
-        }
-
-        return ret;
-    }
-
     public void onClick(View view) {
         TextView t = (TextView)view.findViewById(R.id.image_count);
         if (t.getText().toString().equals("Прогноз")){
@@ -252,7 +208,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this,Sovmestimost.class);
             startActivity(intent);
         }else if (t.getText().toString().equals("Периоды")){
-
+            Intent intent = new Intent(MainActivity.this,Periodi.class);
+            startActivity(intent);
         }
     }
 }
