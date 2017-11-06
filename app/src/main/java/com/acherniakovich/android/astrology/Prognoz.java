@@ -1,6 +1,8 @@
 package com.acherniakovich.android.astrology;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
@@ -25,9 +28,14 @@ import java.util.Locale;
 
 public class Prognoz extends Activity {
 
-    private Spinner sp_1;
+    private Spinner sp_1,dateOfPrognoz;
     private ArrayList <Integer> list;
-    private Button buttonMap;
+    private Button buttonMap,dateBirdthParthner;
+    private int DIALOG_DATE = 1;
+
+    int myYear = 2017;
+    int myMonth = 1;
+    int myDay = 1;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -77,14 +85,6 @@ public class Prognoz extends Activity {
     }
 
     private void init() {
-
-        list = new ArrayList<>();
-        sp_1 = (Spinner)findViewById(R.id.sp_1);
-        for (int i = 1900;i<=2020;i++){
-            list.add(i);
-        }
-        ArrayAdapter <Integer> arrayAdapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_list_item_1,list);
-        sp_1.setAdapter(arrayAdapter);
         buttonMap = (Button)findViewById(R.id.buttonMap);
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,8 +93,41 @@ public class Prognoz extends Activity {
                 startActivityForResult(intent,1);
             }
         });
+        dateOfPrognoz = (Spinner) findViewById(R.id.dateOfPrognoz);
+        ArrayList <String>listOfData = new ArrayList<>();
+        for (int i = 2017; i>=1900;i--){
+            listOfData.add(i+"");
+        }
+        ArrayAdapter <String> adapter = new ArrayAdapter<String>(Prognoz.this,android.R.layout.simple_list_item_1,listOfData);
+        dateOfPrognoz.setAdapter(adapter);
+
+        dateBirdthParthner = (Button)findViewById(R.id.dateBirdthParthner);
+        dateBirdthParthner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DIALOG_DATE);
+            }
+        });
 
     }
+
+    protected Dialog onCreateDialog(int id) {
+        if (id == DIALOG_DATE) {
+            DatePickerDialog tpd = new DatePickerDialog(this, myCallBack, myYear, myMonth, myDay);
+            return tpd;
+        }
+        return super.onCreateDialog(id);
+    }
+
+    DatePickerDialog.OnDateSetListener myCallBack = new DatePickerDialog.OnDateSetListener() {
+
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            myYear = year;
+            myMonth = monthOfYear;
+            myDay = dayOfMonth;
+            dateBirdthParthner.setText(myDay+"."+myMonth+1+"."+myYear);
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -111,6 +144,6 @@ public class Prognoz extends Activity {
         String x = formatter.format(latitude);
         String y = formatter.format(longitude);
 
-        buttonMap.setText("Координаты встречи = : " + x+" ; "+y);
+        buttonMap.setText("Координаты рождения = : " + x+" ; "+y);
     }
 }
