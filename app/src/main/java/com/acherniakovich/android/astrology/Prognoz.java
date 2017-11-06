@@ -1,22 +1,33 @@
 package com.acherniakovich.android.astrology;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class Prognoz extends Activity {
 
     private Spinner sp_1;
     private ArrayList <Integer> list;
+    private Button buttonMap;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -61,12 +72,12 @@ public class Prognoz extends Activity {
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
             public void onTabChanged(String tabId) {
                 //Toast.makeText(getBaseContext(), "tabId = " + tabId, Toast.LENGTH_SHORT).show();
-
             }
         });
     }
 
     private void init() {
+
         list = new ArrayList<>();
         sp_1 = (Spinner)findViewById(R.id.sp_1);
         for (int i = 1900;i<=2020;i++){
@@ -74,5 +85,32 @@ public class Prognoz extends Activity {
         }
         ArrayAdapter <Integer> arrayAdapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_list_item_1,list);
         sp_1.setAdapter(arrayAdapter);
+        buttonMap = (Button)findViewById(R.id.buttonMap);
+        buttonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Prognoz.this,MapsActivity.class);
+                startActivityForResult(intent,1);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data==null){
+            return;
+        }
+        double [] listCoordinates;
+        listCoordinates = data.getDoubleArrayExtra("array");
+
+        double latitude = listCoordinates[0];
+        double longitude = listCoordinates[1];
+
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        String x = formatter.format(latitude);
+        String y = formatter.format(longitude);
+
+        buttonMap.setText("Координаты встречи = : " + x+" ; "+y);
     }
 }

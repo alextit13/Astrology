@@ -126,12 +126,11 @@
                             android:text="@string/text_city_prognoz"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                        <EditText
-                            android:id="@+id/et_city"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                        </EditText>
+                        <Button
+                            android:id="@+id/buttonMap"
+                            android:text="Выбрать город"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
                     <Button
                         android:background="@drawable/my_button_bg"
